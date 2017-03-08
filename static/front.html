@@ -29,7 +29,7 @@
         $scope.submit = function() {
             $http({
 
-                url : "http://127.0.0.1:5000/insertrecord/",
+                url : "http://onevdev.me:5000/insertrecord/",
                 method : "GET",
                 params : {
                 roadid : $scope.roadid,
@@ -48,7 +48,7 @@
         $scope.submitPrediction = function() {
             $http({
 
-                url : "http://127.0.0.1:5000/getprediction/",
+                url : "http://onevdev.me:5000/getprediction/",
                 method : "GET",
                 params : {
                 roadid : $scope.roadidPredict,
@@ -56,9 +56,8 @@
                 dayofweek : $scope.dayofweekPredict,
                 timeofday : $scope.timeofdayPredict
                 }
-            }).success(function (response) {
-                console.log("in response" + response)
-                $scope.predict = "in response"
+            }).success(function (response) {)
+                $scope.predict = response
             });
         }
 
