@@ -1,0 +1,66 @@
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+
+<div ng-app="myApp" ng-controller="formCtrl">
+    <form>
+        Road Id: <input type="text" name="roadid" ng-model="roadid"><br>
+        Direction: <input type="text" name="direction" ng-model="direction"><br>
+        Day of Week: <input type="text" name="dayofweek" ng-model="dayofweek"><br>
+        Time of Day: <input type="text" name="timeofday" ng-model="timeofday"><br>
+        Traffic Status: <input type="text" name="trafficstatus" ng-model="trafficstatus"><br>
+        <br>
+        <button ng-click="submit()">SUBMIT</button>
+    </form>
+    <br>
+    <form>
+        Road Id: <input type="text" name="roadidPredict" ng-model="roadidPredict"><br>
+        Direction: <input type="text" name="directionPredict" ng-model="directionPredict"><br>
+        Day of Week: <input type="text" name="dayofweekPredict" ng-model="dayofweekPredict"><br>
+        Time of Day: <input type="text" name="timeofdayPredict" ng-model="timeofdayPredict"><br>
+        <br>
+        <button ng-click="submitPrediction()">PREDICT</button>
+    </form>
+    <p>Resulting Prediction</p>
+    <h5 name="predict" ng-model="predict"> {{ predict }}</h5>
+</div>
+
+<script>
+    var app = angular.module('myApp', []);
+    app.controller('formCtrl', function ($scope, $http) {
+        $scope.submit = function() {
+            $http({
+
+                url : "http://127.0.0.1:5000/insertrecord/",
+                method : "GET",
+                params : {
+                roadid : $scope.roadid,
+                direction : $scope.direction,
+                dayofweek : $scope.dayofweek,
+                timeofday : $scope.timeofday,
+                trafficstatus : $scope.trafficstatus
+            }});
+            $scope.trafficstatus = "";
+            $scope.timeofday = "";
+            $scope.dayofweek = "";
+            $scope.direction = "";
+            $scope.roadid = "";
+        }
+
+        $scope.submitPrediction = function() {
+            $http({
+
+                url : "http://127.0.0.1:5000/getprediction/",
+                method : "GET",
+                params : {
+                roadid : $scope.roadidPredict,
+                direction : $scope.directionPredict,
+                dayofweek : $scope.dayofweekPredict,
+                timeofday : $scope.timeofdayPredict
+                }
+            }).success(function (response) {
+                console.log("in response" + response)
+                $scope.predict = "in response"
+            });
+        }
+
+    });
+</script>

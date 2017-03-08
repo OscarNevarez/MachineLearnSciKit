@@ -1,8 +1,10 @@
 from __future__ import print_function
 from flask import Flask
+from flask import Response
 from flask import request
 from sklearn import svm
 import sys
+import json
 
 
 clf = svm.SVC(gamma=0.001, C=100.)
@@ -21,7 +23,7 @@ def insert_record():
     return "success " + str(record["roadid"])+ " , " + str(record["direction"]) + " , " + str(record["dayofweek"]) + " , " + str(record["timeofday"]) + " , " + str(record["trafficstatus"]), 200
 
 
-@app.route('/getPrediction/', methods=['GET'])
+@app.route('/getprediction/', methods=['GET'])
 def model_trainingdata():
     record = {"roadid": int(request.args.get("roadid")),
               "direction": int(request.args.get("direction")),
@@ -38,7 +40,10 @@ def model_trainingdata():
     print(str(len(xvalues)) + " x values with " + str(len(yvalues)) + " y values ", file=sys.stderr)
     clf.fit(xvalues, yvalues)
     prediction = clf.predict([ [record["roadid"], record["direction"], record["dayofweek"], record["timeofday"] ]])
-    return str(prediction), 200
+    dataResp = { 'prediction' : str(prediction)}
+    js = json.dumps(dataResp)
+    resp = Response(js, status = 200, mimetype='application/json')
+    return resp
 
 
 def getyvalues(data):
