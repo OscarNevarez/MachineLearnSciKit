@@ -11,6 +11,10 @@ clf = svm.SVC(gamma=0.001, C=100.)
 modelTrained = False
 app = Flask(__name__)
 data = []
+@app.route('/')
+def home():
+    return app.send_static_file('front.html')
+
 
 @app.route('/insertrecord/', methods=['GET'])
 def insert_record():
